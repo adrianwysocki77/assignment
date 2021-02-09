@@ -35,6 +35,15 @@ export const Category = ({
     }
   }, [setCategories, categories, fullCategories]);
 
+  const collapseCategories = useCallback(() => {
+    if (objIndex === fullCategories.length - 1) {
+      return;
+    } else {
+      const categoriesCopy = [...fullCategories];
+      setCategories(categoriesCopy.slice(0, objIndex + 1));
+    }
+  }, [setCategories, categories, fullCategories]);
+
   const nestedCategories = (
     categories,
     objIndex,
@@ -67,7 +76,13 @@ export const Category = ({
                 name={objIndex}
               />
             ) : (
-              <p className="h3">{categories[0].text}</p>
+              <p
+                className="h3"
+                style={{ cursor: "pointer" }}
+                onClick={collapseCategories}
+              >
+                {categories[0].text}
+              </p>
             )}
           </div>
           <div className="p-2">
