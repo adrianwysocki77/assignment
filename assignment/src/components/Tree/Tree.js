@@ -1,21 +1,22 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { TreeNode } from "../TreeNode/TreeNode";
+import { AddButton } from "../AddButton/AddButton";
 
 export const Tree = () => {
   const [nodes, setNodes] = useState([]);
 
   const data = [
     {
-      title: "aa",
+      title: "Adrian",
       children: [
         {
-          title: "as",
-          children: [{ title: "gg", children: [{ title: "www" }] }],
+          title: "Kasia",
+          children: [{ title: "Łukasz", children: [{ title: "Luiza" }] }],
         },
       ],
     },
-    { title: "bbb" },
-    { title: "ssss" },
+    { title: "Maks" },
+    { title: "Mirek" },
   ];
 
   const initializedCopy = useCallback(
@@ -30,6 +31,7 @@ export const Tree = () => {
           title,
           children: hasChildren ? initializedCopy(children, id) : undefined,
           changeTitle: changeTitle(id),
+          addChild: addChild(id),
         };
       }
 
@@ -38,23 +40,91 @@ export const Tree = () => {
     [nodes, setNodes]
   );
 
-  const changeTitle = useCallback((id) => {
-    return (newTitle) => {
-      let idCopy = id;
-      idCopy = idCopy.split(".").map((str) => parseInt(str));
-      const nodesCopy = initializedCopy([...nodes]);
-      console.log(nodesCopy);
-      let changingNode = nodesCopy[idCopy[0] - 1];
-      if (id.length > 1) {
-        for (let i = 1; i < id.length; i++) {
-          changingNode = changingNode.children[idCopy[i] - 1];
+  const changeTitle =
+    // useCallback(
+    (id) => {
+      return (newTitle) => {
+        if (!Array.isArray(id)) {
+          id = id.split(".").map((str) => parseInt(str));
         }
-      }
 
-      changingNode.title = newTitle;
-      setNodes(nodesCopy);
+        setNodes((nodes) => {
+          let nodesCopy = initializedCopy([...nodes]);
+          let changingNode = nodesCopy[id[0] - 1];
+          if (id.length > 1) {
+            for (let i = 1; i < id.length; i++) {
+              changingNode = changingNode.children[id[i] - 1];
+            }
+          }
+          changingNode.title = newTitle;
+          return nodesCopy;
+        });
+      };
     };
-  }, []);
+  // ,
+  // [nodes, setNodes]
+  // );
+
+  const addRootElement = useCallback(() => {
+    {
+      const id = nodes.length ? `${nodes.length + 1}` : "1";
+      const newNode = {
+        children: undefined,
+        changeTitle: changeTitle(id),
+        // removeNode: removeNode(id),
+        // addChild: addChild(id),
+        id,
+        title: "New Category",
+      };
+
+      setNodes((nodes) => {
+        return [...nodes, newNode];
+      });
+    }
+  }, [nodes, setNodes]);
+
+  const addChild = useCallback(
+    (id) => {
+      return () => {
+        console.log("id", id);
+
+        if (!Array.isArray(id)) {
+          id = id.split(".").map((str) => parseInt(str));
+        }
+
+        setNodes((nodes) => {
+          let nodesCopy = initializedCopy([...nodes]);
+          let changingNode = nodesCopy[id[0] - 1];
+
+          if (id.length > 1) {
+            for (let i = 1; i < id.length; i++) {
+              changingNode = changingNode.children[id[i] - 1];
+            }
+          }
+
+          if (changingNode.children === undefined) {
+            changingNode.children = [];
+          }
+          let idCopy = `${id.join(".")}.${changingNode.children.length + 1}`;
+
+          changingNode.children = [
+            ...changingNode.children,
+            {
+              children: undefined,
+              changeTitle: changeTitle(idCopy),
+              // removeNode: this.removeNode(idCopy),
+              addChild: addChild(idCopy),
+              id: idCopy,
+              title: "",
+            },
+          ];
+
+          return nodesCopy;
+        });
+      };
+    },
+    [nodes, setNodes]
+  );
 
   useEffect(() => {
     setNodes(initializedCopy(data));
@@ -66,12 +136,8 @@ export const Tree = () => {
         const { id, ...props } = nodeProps;
         return <TreeNode key={id} {...props} />;
       })}
+
+      <AddButton addRootElement={addRootElement} />
     </>
   );
 };
-
-{
-  /* <div style={{ position: "absolute", right: "0px" }}>
-         <pre>{JSON.stringify(nodes, null, 2)}</pre>
-       </div> */
-}
