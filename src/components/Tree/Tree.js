@@ -7,11 +7,31 @@ export const Tree = () => {
 
   const data = [];
 
+  const addChildrenVisibility = useCallback(
+    (nodes, location) => {
+      const nodesCopy = [];
+      for (let i = 0; i < nodes.length; i++) {
+        const { children, title, childrenVisibility } = nodes[i];
+        const hasChildren = children !== undefined;
+        const id = location ? `${location}.${i + 1}` : `${i + 1}`;
+        nodesCopy[i] = {
+          id,
+          title,
+          children: hasChildren ? initializedCopy(children, id) : undefined,
+          childrenVisibility: true,
+        };
+      }
+
+      return nodesCopy;
+    },
+    [nodes, setNodes]
+  );
+
   const initializedCopy = useCallback(
     (nodes, location) => {
       const nodesCopy = [];
       for (let i = 0; i < nodes.length; i++) {
-        const { children, title } = nodes[i];
+        const { children, title, childrenVisibility } = nodes[i];
         const hasChildren = children !== undefined;
         const id = location ? `${location}.${i + 1}` : `${i + 1}`;
         nodesCopy[i] = {
@@ -21,7 +41,7 @@ export const Tree = () => {
           changeTitle: changeTitle(id),
           addChild: addChild(id),
           removeNode: removeNode(id),
-          childrenVisibility: true,
+          childrenVisibility: childrenVisibility && true,
           changeChildrenVisibility: changeChildrenVisibility(id),
         };
       }
@@ -60,6 +80,7 @@ export const Tree = () => {
       const newNode = {
         children: undefined,
         childrenVisibility: true,
+        changeChildrenVisibility: changeChildrenVisibility(id),
         changeTitle: changeTitle(id),
         removeNode: removeNode(id),
         addChild: addChild(id),
@@ -100,6 +121,7 @@ export const Tree = () => {
             {
               children: undefined,
               childrenVisibility: true,
+              changeChildrenVisibility: changeChildrenVisibility(idCopy),
               changeTitle: changeTitle(idCopy),
               removeNode: removeNode(idCopy),
               addChild: addChild(idCopy),
@@ -163,8 +185,8 @@ export const Tree = () => {
           if (id.length > 1) {
             for (let i = 1; i < id.length; i++) {
               changingNode = changingNode.children[id[i] - 1];
+              changingNode.childrenVisibility = !changingNode.childrenVisibility;
             }
-            changingNode.childrenVisibility = !changingNode.childrenVisibility;
           } else {
             changingNode.childrenVisibility = !changingNode.childrenVisibility;
           }
@@ -177,7 +199,7 @@ export const Tree = () => {
   );
 
   useEffect(() => {
-    setNodes(initializedCopy(data));
+    setNodes(initializedCopy(addChildrenVisibility(data)));
   }, []);
 
   return (
