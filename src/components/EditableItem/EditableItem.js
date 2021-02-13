@@ -13,7 +13,10 @@ export const EditableItem = (props) => {
   return (
     <div className="input-group mb-2 col-md-4 ml-1">
       {!editCategory ? (
-        <div className="form-control" onClick={changeChildrenVisibility}>
+        <div
+          className="form-control text-primary"
+          onClick={changeChildrenVisibility}
+        >
           {title}
         </div>
       ) : (
