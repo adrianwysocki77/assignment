@@ -76,8 +76,6 @@ export const Tree = () => {
   const addChild = useCallback(
     (id) => {
       return () => {
-        console.log("id", id);
-
         if (!Array.isArray(id)) {
           id = id.split(".").map((str) => parseInt(str));
         }
