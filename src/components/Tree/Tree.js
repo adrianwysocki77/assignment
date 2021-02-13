@@ -188,8 +188,8 @@ export const Tree = () => {
           if (id.length > 1) {
             for (let i = 1; i < id.length; i++) {
               changingNode = changingNode.children[id[i] - 1];
-              changingNode.childrenVisibility = !changingNode.childrenVisibility;
             }
+            changingNode.childrenVisibility = !changingNode.childrenVisibility;
           } else {
             changingNode.childrenVisibility = !changingNode.childrenVisibility;
           }
