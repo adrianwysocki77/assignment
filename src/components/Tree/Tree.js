@@ -5,21 +5,7 @@ import { AddButton } from "../AddButton/AddButton";
 export const Tree = () => {
   const [nodes, setNodes] = useState([]);
 
-  const data = [
-    {
-      title: "Category 1",
-      children: [
-        {
-          title: "Category 2",
-          children: [
-            { title: "Category 3", children: [{ title: "Category 4" }] },
-          ],
-        },
-      ],
-    },
-    { title: "Category 5" },
-    { title: "Category 6" },
-  ];
+  const data = [];
 
   const initializedCopy = useCallback(
     (nodes, location) => {
