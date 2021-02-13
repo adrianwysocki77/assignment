@@ -1,3 +1,5 @@
 export const AddButton = ({ addRootElement }) => (
-  <div onClick={addRootElement}>add element</div>
+  <button type="button" className="btn btn-success" onClick={addRootElement}>
+    +
+  </button>
 );

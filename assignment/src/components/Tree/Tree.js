@@ -7,16 +7,18 @@ export const Tree = () => {
 
   const data = [
     {
-      title: "Adrian",
+      title: "Category 1",
       children: [
         {
-          title: "Kasia",
-          children: [{ title: "Łukasz", children: [{ title: "Luiza" }] }],
+          title: "Category 2",
+          children: [
+            { title: "Category 3", children: [{ title: "Category 4" }] },
+          ],
         },
       ],
     },
-    { title: "Maks" },
-    { title: "Mirek" },
+    { title: "Category 5" },
+    { title: "Category 6" },
   ];
 
   const initializedCopy = useCallback(
@@ -32,6 +34,9 @@ export const Tree = () => {
           children: hasChildren ? initializedCopy(children, id) : undefined,
           changeTitle: changeTitle(id),
           addChild: addChild(id),
+          removeNode: removeNode(id),
+          childrenVisibility: true,
+          changeChildrenVisibility: changeChildrenVisibility(id),
         };
       }
 
@@ -40,8 +45,7 @@ export const Tree = () => {
     [nodes, setNodes]
   );
 
-  const changeTitle =
-    // useCallback(
+  const changeTitle = useCallback(
     (id) => {
       return (newTitle) => {
         if (!Array.isArray(id)) {
@@ -60,19 +64,19 @@ export const Tree = () => {
           return nodesCopy;
         });
       };
-    };
-  // ,
-  // [nodes, setNodes]
-  // );
+    },
+    [nodes, setNodes]
+  );
 
   const addRootElement = useCallback(() => {
     {
       const id = nodes.length ? `${nodes.length + 1}` : "1";
       const newNode = {
         children: undefined,
+        childrenVisibility: true,
         changeTitle: changeTitle(id),
-        // removeNode: removeNode(id),
-        // addChild: addChild(id),
+        removeNode: removeNode(id),
+        addChild: addChild(id),
         id,
         title: "New Category",
       };
@@ -102,7 +106,7 @@ export const Tree = () => {
             }
           }
 
-          if (changingNode.children === undefined) {
+          if (changingNode?.children === undefined) {
             changingNode.children = [];
           }
           let idCopy = `${id.join(".")}.${changingNode.children.length + 1}`;
@@ -111,13 +115,75 @@ export const Tree = () => {
             ...changingNode.children,
             {
               children: undefined,
+              childrenVisibility: true,
               changeTitle: changeTitle(idCopy),
-              // removeNode: this.removeNode(idCopy),
+              removeNode: removeNode(idCopy),
               addChild: addChild(idCopy),
               id: idCopy,
-              title: "",
+              title: "New Category",
             },
           ];
+
+          return nodesCopy;
+        });
+      };
+    },
+    [nodes, setNodes]
+  );
+
+  const removeNode = (id) => {
+    return () => {
+      if (!Array.isArray(id)) {
+        id = id.split(".").map((str) => parseInt(str));
+      }
+
+      setNodes((nodes) => {
+        const nodesCopy = initializedCopy(nodes);
+
+        if (id.length === 1) {
+          return [
+            ...nodesCopy.slice(0, [id[0] - 1]),
+            ...nodesCopy.slice(id[0]),
+          ];
+        } else {
+          let changingNode = nodes[id[0] - 1];
+
+          for (let i = 2; i < id.length; i++) {
+            changingNode = changingNode.children[id[i - 1] - 1];
+          }
+
+          const index = id[id.length - 1] - 1;
+
+          const newChildren = [
+            ...changingNode.children.slice(0, index),
+            ...changingNode.children.slice(index + 1),
+          ];
+          changingNode.children = newChildren;
+
+          return nodesCopy;
+        }
+      });
+    };
+  };
+
+  const changeChildrenVisibility = useCallback(
+    (id) => {
+      return () => {
+        if (!Array.isArray(id)) {
+          id = id.split(".").map((str) => parseInt(str));
+        }
+        setNodes((nodes) => {
+          let nodesCopy = initializedCopy([...nodes]);
+          let changingNode = nodesCopy[id[0] - 1];
+
+          if (id.length > 1) {
+            for (let i = 1; i < id.length; i++) {
+              changingNode = changingNode.children[id[i] - 1];
+            }
+            changingNode.childrenVisibility = !changingNode.childrenVisibility;
+          } else {
+            changingNode.childrenVisibility = !changingNode.childrenVisibility;
+          }
 
           return nodesCopy;
         });
@@ -131,13 +197,13 @@ export const Tree = () => {
   }, []);
 
   return (
-    <>
+    <div className="container pt-3">
       {nodes.map((nodeProps) => {
         const { id, ...props } = nodeProps;
         return <TreeNode key={id} {...props} />;
       })}
 
       <AddButton addRootElement={addRootElement} />
-    </>
+    </div>
   );
 };

@@ -1,7 +1,7 @@
 import React from "react";
 import { EditableItem } from "../EditableItem/EditableItem";
 
-export const TreeNode = ({ children, ...props }) => {
+export const TreeNode = ({ children, childrenVisibility, ...props }) => {
   const hasChildren = children !== undefined;
 
   const renderChildren = (children) => {
@@ -17,9 +17,9 @@ export const TreeNode = ({ children, ...props }) => {
   };
 
   return (
-    <div style={{ marginLeft: "10px" }}>
+    <div className="flex-column ml-2">
       <EditableItem {...props} />
-      {hasChildren && renderChildren(children)}
+      {childrenVisibility && hasChildren && renderChildren(children)}
     </div>
   );
 };
