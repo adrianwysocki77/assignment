@@ -150,7 +150,7 @@ export const Tree = () => {
           if (id.length === 1) {
             return initializedCopy([
               ...nodesCopy.slice(0, id[0] - 1),
-              ...nodesCopy.slice(id[0])
+              ...nodesCopy.slice(id[0]),
             ]);
           } else {
             let changingNode = nodes[id[0] - 1];
