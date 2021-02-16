@@ -111,9 +111,10 @@ export const Tree = () => {
             }
           }
 
-          if (changingNode?.children === undefined) {
+          if (!changingNode?.children) {
             changingNode.children = [];
           }
+
           let idCopy = `${id.join(".")}.${changingNode.children.length + 1}`;
 
           changingNode.children = [
@@ -129,7 +130,6 @@ export const Tree = () => {
               title: "New Category",
             },
           ];
-
           return nodesCopy;
         });
       };
@@ -145,13 +145,13 @@ export const Tree = () => {
         }
 
         setNodes((nodes) => {
-          const nodesCopy = initializedCopy(nodes);
+          const nodesCopy = initializedCopy([...nodes]);
 
           if (id.length === 1) {
-            return [
-              ...nodesCopy.slice(0, [id[0] - 1]),
-              ...nodesCopy.slice(id[0]),
-            ];
+            return initializedCopy([
+              ...nodesCopy.slice(0, id[0] - 1),
+              ...nodesCopy.slice(id[0])
+            ]);
           } else {
             let changingNode = nodes[id[0] - 1];
 
