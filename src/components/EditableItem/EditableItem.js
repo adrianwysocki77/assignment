@@ -50,14 +50,14 @@ export const EditableItem = (props) => {
         </button>
         <button
           type="button"
-          className="btn btn-success input-group-append ml-2"
+          className="btn btn-success ml-2"
           onClick={addChild}
         >
           +
         </button>
         <button
           type="button"
-          className="btn btn-danger input-group-append ml-2"
+          className="btn btn-danger ml-2"
           onClick={removeNode}
         >
           x
