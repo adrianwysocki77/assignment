@@ -17,7 +17,7 @@ export const TreeNode = ({ children, childrenVisibility, ...props }) => {
   };
 
   return (
-    <div className="flex-column ml-2">
+    <div className="flex-column ml-3">
       <EditableItem {...props} />
       {childrenVisibility && hasChildren && renderChildren(children)}
     </div>
