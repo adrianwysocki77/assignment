@@ -18,7 +18,7 @@ export const EditableItem = (props) => {
 
   return (
     <div className="row">
-      <div className="mb-2 col-md-4">
+      <div className="mb-2 col-md-3">
         {!editCategory ? (
           <div className="form-control text-primary" onClick={collapse}>
             {title}
