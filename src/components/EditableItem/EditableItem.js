@@ -17,8 +17,8 @@ export const EditableItem = (props) => {
   }, [arrowDown, setArrowDown]);
 
   return (
-    <div className="row">
-      <div className="mb-2 col-md-3">
+    <div className="row mt-2">
+      <div className="mb-2  col-md-3">
         {!editCategory ? (
           <div className="form-control text-primary" onClick={collapse}>
             {title}
@@ -40,28 +40,29 @@ export const EditableItem = (props) => {
           onClick={collapse}
         />
       </div>
-
-      <div className="d-flex align-items-start">
-        <button
-          className={`btn btn-${!editCategory ? "primary" : "warning"}`}
-          onClick={() => setEditCategory((prevState) => !prevState)}
-        >
-          {editCategory ? "Save" : "Edit"}
-        </button>
-        <button
-          type="button"
-          className="btn btn-success ml-2"
-          onClick={addChild}
-        >
-          +
-        </button>
-        <button
-          type="button"
-          className="btn btn-danger ml-2"
-          onClick={removeNode}
-        >
-          x
-        </button>
+      <div cllassName="col-md-3">
+        <div className="d-flex align-items-start">
+          <button
+            className={`btn btn-${!editCategory ? "primary" : "warning"}`}
+            onClick={() => setEditCategory((prevState) => !prevState)}
+          >
+            {editCategory ? "Save" : "Edit"}
+          </button>
+          <button
+            type="button"
+            className="btn btn-success ml-2"
+            onClick={addChild}
+          >
+            +
+          </button>
+          <button
+            type="button"
+            className="btn btn-danger ml-2"
+            onClick={removeNode}
+          >
+            x
+          </button>
+        </div>
       </div>
     </div>
   );
