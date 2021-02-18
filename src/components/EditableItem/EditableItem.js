@@ -37,6 +37,7 @@ export const EditableItem = (props) => {
           src={window.location.origin + "/arrow.svg"}
           className={arrowDown ? "arrow-icon rotate" : "arrow-icon"}
           style={{ position: "absolute", right: "25px", bottom: "13px" }}
+          onClick={collapse}
         />
       </div>
 
