@@ -138,57 +138,6 @@ export const Tree = () => {
     [nodes, setNodes]
   );
 
-  const removeNode = useCallback(
-    (id) => {
-      return () => {
-        console.log(id)
-        console.log("id", id)
-        console.log("!Array.isArray(id)", !Array.isArray(id))
-        if (!Array.isArray(id)) {
-          id = id.split(".").map((str) => parseInt(str));
-        }
-        setNodes((nodes) => {
-          const nodesCopy = initializedCopy([...nodes]);
-          console.log("nodesCopy", nodesCopy)
-
-          if (id.length === 1) {
-            return initializedCopy([
-              ...nodesCopy.slice(0, id[0] - 1),
-              ...nodesCopy.slice(id[0]),
-            ]);
-          } else {
-            let changingNode = nodes[id[0] - 1];
-
-            console.log("changingNode", changingNode)
-
-            for (let i = 2; i < id.length; i++) {
-              changingNode = changingNode.children[id[i - 1] - 1];
-            }
-
-            console.log("changingNode.children", changingNode.children)
-
-            const index = id[id.length - 1] - 1;
-
-            console.log("index", index)
-
-            const newChildren = [
-              ...changingNode.children.slice(0, index),
-              ...changingNode.children.slice(index + 1),
-            ];
-
-            console.log("newChildren", newChildren)
-
-            changingNode.children = newChildren;
-            console.log("nodesCopy", nodesCopy)
-            console.log("------")
-            return nodesCopy;
-          }
-        });
-      };
-    },
-    [nodes, setNodes]
-  );
-
   const changeChildrenVisibility = useCallback(
     (id) => {
       return () => {
@@ -213,6 +162,52 @@ export const Tree = () => {
       };
     },
     [nodes, setNodes]
+  );
+
+  const removeNode = useCallback(
+    (id) => {
+      return () => {
+        if (!Array.isArray(id)) {
+          id = id.split(".").map((str) => parseInt(str));
+        }
+
+        setNodes((nodes) => {
+          const nodesCopy = initializedCopy([...nodes]);
+          if (id.length === 1) {
+            return initializedCopy([
+              ...nodesCopy.slice(0, id[0] - 1),
+              ...nodesCopy.slice(id[0]),
+            ]);
+          } else {
+            let changingNode = nodes[id[0] - 1];
+
+            for (let i = 2; i < id.length; i++) {
+              changingNode = changingNode.children[id[i - 1] - 1];
+            }
+
+            const index = id[id.length - 1] - 1;
+
+            const newChildren = [
+              ...changingNode.children.slice(0, index),
+              ...changingNode.children.slice(index + 1),
+            ];
+
+            changingNode.children = newChildren;
+            return initializedCopy(nodesCopy);
+          }
+        });
+      };
+    },
+    [
+      nodes,
+      setNodes,
+      addChildrenVisibility,
+      initializedCopy,
+      changeTitle,
+      addRootElement,
+      addChild,
+      changeChildrenVisibility,
+    ]
   );
 
   useEffect(() => {
