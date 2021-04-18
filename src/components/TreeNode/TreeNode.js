@@ -1,4 +1,5 @@
 import React from "react";
+
 import { EditableItem } from "../EditableItem/EditableItem";
 
 export const TreeNode = ({ children, childrenVisibility, ...props }) => {
