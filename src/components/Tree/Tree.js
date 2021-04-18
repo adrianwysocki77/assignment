@@ -179,6 +179,8 @@ export const Tree = () => {
             console.log("newChildren", newChildren)
 
             changingNode.children = newChildren;
+            console.log("nodesCopy", nodesCopy)
+            console.log("------")
             return nodesCopy;
           }
         });
