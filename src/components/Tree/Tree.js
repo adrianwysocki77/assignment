@@ -172,14 +172,16 @@ export const Tree = () => {
         }
 
         setNodes((nodes) => {
+          console.log("nodes", [...nodes]);
           const nodesCopy = initializedCopy([...nodes]);
+          console.log("nodesCopy", nodesCopy);
           if (id.length === 1) {
             return initializedCopy([
               ...nodesCopy.slice(0, id[0] - 1),
               ...nodesCopy.slice(id[0]),
             ]);
           } else {
-            let changingNode = nodes[id[0] - 1];
+            let changingNode = nodesCopy[id[0] - 1];
 
             for (let i = 2; i < id.length; i++) {
               changingNode = changingNode.children[id[i - 1] - 1];
@@ -193,6 +195,11 @@ export const Tree = () => {
             ];
 
             changingNode.children = newChildren;
+
+            console.log(
+              "initializedCopy(nodesCopy)",
+              initializedCopy(nodesCopy)
+            );
             return initializedCopy(nodesCopy);
           }
         });
