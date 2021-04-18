@@ -144,10 +144,8 @@ export const Tree = () => {
         if (!Array.isArray(id)) {
           id = id.split(".").map((str) => parseInt(str));
         }
-
         setNodes((nodes) => {
           const nodesCopy = initializedCopy([...nodes]);
-
           if (id.length === 1) {
             return initializedCopy([
               ...nodesCopy.slice(0, id[0] - 1),
@@ -167,7 +165,6 @@ export const Tree = () => {
               ...changingNode.children.slice(index + 1),
             ];
             changingNode.children = newChildren;
-
             return nodesCopy;
           }
         });

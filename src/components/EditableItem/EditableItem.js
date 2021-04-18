@@ -40,7 +40,7 @@ export const EditableItem = (props) => {
           onClick={collapse}
         />
       </div>
-      <div cllassName="col-md-3">
+      <div className="col-md-3">
         <div className="d-flex align-items-start">
           <button
             className={`btn btn-${!editCategory ? "primary" : "warning"}`}
